@@ -38,8 +38,8 @@ Student1.countUser()
 Student1.checkEligibleForPlacement()
 Student2.checkEligibleForPlacement()
 Student3.checkEligibleForPlacement()
-Student4.checkEligibleForPlacement()
 Student5.checkEligibleForPlacement()
+Student4.checkEligibleForPlacement()
 
 
 
