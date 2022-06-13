@@ -13,9 +13,16 @@ function storeuser(e){
         userEmail,
         userPhone
     }
-    localStorage.setItem(userDetails.userEmail,JSON.stringify(userDetails))
-    location.reload()
-    
+
+    axios.post("https://crudcrud.com/api/a6f6ee0b145b4b89aa0fdebfd006c0c8/appinfo",userDetails)
+        .then((response)=>{
+            console.log(response);
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+
+    //localStorage.setItem(userDetails.userEmail,JSON.stringify(userDetails))
 }
 
 //previous user details
@@ -37,7 +44,7 @@ for (let i=0;i<localStorage.length;i++)
     //Set classname
     li.className="list-group-item"
     btn.className="btn"
-    btndelete.className="btn btn-danger btn-sm float-right delete"
+    btndelete.className="btn delete"
 
     btn.appendChild(document.createTextNode("Edit"))
     btndelete.appendChild(document.createTextNode("delete"))
