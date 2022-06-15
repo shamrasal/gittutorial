@@ -37,46 +37,39 @@ window.addEventListener("DOMContentLoaded",()=> {
 
 function showNewUserOnScreen(user){
     const parentNode = document.getElementById('items');
-    const childHTML = `<li id=${user._id}> ${user.userName} - ${user.userEmail} - ${user.userPhone}
-                             <button onclick=deleteinfo('${user._id}') class = "btn delete"> Delete User </button>
-                             <button onclick=edituser('${user._id}') class = "btn "> Edit User </button>
+    const childHTML = `<li id=${user._id}> ${user.userName} - ${user.userEmail}
+                            <button onclick=deleteinfo('${user._id}')> Delete User </button>
+                            <button onclick=edituser('${user._id}')> Edit User </button> 
                           </li>`
     parentNode.innerHTML = parentNode.innerHTML + childHTML;
 }
-     //delete user 
-    
-        function deleteinfo(userid){
-                axios.delete(`https://crudcrud.com/api/02da3903021d436ea3b752a240fbacff/appinfo/${userid}`)
-                    .then((response)=>{
-                        console.log(response)
-                     })
-                     .catch((err)=>{
-                         console.log(err)
-                     })
-                     removefromscreen(userid)
-        }
+    //delete user 
+     function deleteinfo(userid){
+            axios.delete(`https://crudcrud.com/api/02da3903021d436ea3b752a240fbacff/appinfo/${userid}`)
+                .then((response)=>{
+                    console.log(response)
+                 })
+                 .catch((err)=>{
+                     console.log(err)
+                 })
+                 removefromscreen(userid)
+    }
 
-        function removefromscreen(userid){
-            const parentNode = document.getElementById('items');
-            const childnode = document.getElementById(userid)
-            if(childnode){
-                parentNode.removeChild(childnode)
-            }
+    function removefromscreen(userid){
+        const parentNode = document.getElementById('items');
+        const childnode = document.getElementById(userid)
+        if(childnode){
+            parentNode.removeChild(childnode)
         }
+    }
         
-    //edit user
-    function editInfo(userid){
-        if(e.target.classList.contains("btn")){
-            var deleteuser1 = (localStorage.key(e.target))
-            var val1 = localStorage.getItem(deleteuser1)
-            var editingName = document.getElementById("name")
-            var editingEmail = document.getElementById("email")
-            var editingPhone = document.getElementById("phone")
-            var localinfo = JSON.parse(val1)
-            editingName.value=localinfo.userName
-            editingEmail.value=localinfo.userEmail
-            editingPhone.value=localinfo.userPhone
-            //deleteUser()
-        }
-
+    function edituser(id){
+        axios.get(`https://crudcrud.com/api/02da3903021d436ea3b752a240fbacff/appinfo/${id}`)
+        .then((response)=>{
+            console.log(response)
+            document.getElementById("name").value=response.data.userName
+            document.getElementById("email").value=response.data.userEmail
+            document.getElementById("phone").value=response.data.userPhone
+            deleteinfo(id)
+        })
     }
