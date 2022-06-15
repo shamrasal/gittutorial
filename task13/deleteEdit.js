@@ -1,5 +1,4 @@
 var form = document.getElementById("addForm")
-
 form.addEventListener("submit",storeuser)
 
 function storeuser(e){
@@ -7,28 +6,24 @@ function storeuser(e){
     var userName = document.getElementById("name").value
     var userEmail = document.getElementById("email").value
     var userPhone = document.getElementById("phone").value
-
     const userDetails = {
         userName,
         userEmail,
         userPhone
     }
-
-    axios.post("https://crudcrud.com/api/ba0fc1fdf92747a2a2c1d70cd4fb3d0d/appinfo",userDetails)
+    axios.post("https://crudcrud.com/api/02da3903021d436ea3b752a240fbacff/appinfo",userDetails)
         .then((response)=>{
+            showNewUserOnScreen(response.data)
             console.log(response);
         })
         .catch((err)=>{
             console.log(err)
         })
-
-    //localStorage.setItem(userDetails.userEmail,JSON.stringify(userDetails))
-    window.location.reload()
 }
 
 //previous user details
 window.addEventListener("DOMContentLoaded",()=> {
-    axios.get("https://crudcrud.com/api/ba0fc1fdf92747a2a2c1d70cd4fb3d0d/appinfo")
+    axios.get("https://crudcrud.com/api/02da3903021d436ea3b752a240fbacff/appinfo/")
         .then((response)=>{
             console.log(response)
             for(let i=0;i<response.data.length;i++){
@@ -40,60 +35,37 @@ window.addEventListener("DOMContentLoaded",()=> {
         })
 })
 
-
 function showNewUserOnScreen(user){
-    var li = document.createElement("li")
-                var btn = document.createElement("button")
-                var btndelete = document.createElement("button")
-                //set idname
-                btn.id="btnedit"
-                btndelete.id="btndelete"
-                
-                //Set classname
-                li.className="list-group-item"
-                btn.className="btn"
-                btndelete.className="btn delete"
-        
-                btn.appendChild(document.createTextNode("Edit"))
-                btndelete.appendChild(document.createTextNode("delete"))
-        
-                //append text node
-                li.appendChild(document.createTextNode("name : " + user.userName + ",  email : " + user.userEmail + ",  phone : " + user.userPhone))
-                li.appendChild(btn)
-                li.appendChild(btndelete)
-        
-                //append li in userdetails
-        
-                var items = document.getElementById("items")
-                items.appendChild(li)
-                
+    const parentNode = document.getElementById('items');
+    const childHTML = `<li id=${user._id}> ${user.userName} - ${user.userEmail} - ${user.userPhone}
+                             <button onclick=deleteinfo('${user._id}') class = "btn delete"> Delete User </button>
+                             <button onclick=edituser('${user._id}') class = "btn "> Edit User </button>
+                          </li>`
+    parentNode.innerHTML = parentNode.innerHTML + childHTML;
 }
-
-
-
-
-
-    
-
      //delete user 
-    var itemlist = document.getElementById("items")  
- 
-    var deleteUser = document.getElementById("btndelete")
-        itemlist.addEventListener("click",deleteinfo)
-        function deleteinfo(e){
-            e.preventDefault()
-            if(e.target.classList.contains("delete")){
-             //var clickItemInfo = JSON.parse(e.target)
-                var deleteuser1 = (localStorage.key(e.target))
-                localStorage.removeItem(deleteuser1)
-                //var oldUser = JSON.parse(localStorage.getItem(old))
-                location.reload()
+    
+        function deleteinfo(userid){
+                axios.delete(`https://crudcrud.com/api/02da3903021d436ea3b752a240fbacff/appinfo/${userid}`)
+                    .then((response)=>{
+                        console.log(response)
+                     })
+                     .catch((err)=>{
+                         console.log(err)
+                     })
+                     removefromscreen(userid)
+        }
+
+        function removefromscreen(userid){
+            const parentNode = document.getElementById('items');
+            const childnode = document.getElementById(userid)
+            if(childnode){
+                parentNode.removeChild(childnode)
             }
         }
+        
     //edit user
-    var editUser = document.getElementById("btnedit")
-    itemlist.addEventListener("click",editInfo)
-    function editInfo(e){
+    function editInfo(userid){
         if(e.target.classList.contains("btn")){
             var deleteuser1 = (localStorage.key(e.target))
             var val1 = localStorage.getItem(deleteuser1)
