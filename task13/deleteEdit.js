@@ -14,7 +14,7 @@ function storeuser(e){
         userPhone
     }
 
-    axios.post("https://crudcrud.com/api/a6f6ee0b145b4b89aa0fdebfd006c0c8/appinfo",userDetails)
+    axios.post("https://crudcrud.com/api/ba0fc1fdf92747a2a2c1d70cd4fb3d0d/appinfo",userDetails)
         .then((response)=>{
             console.log(response);
         })
@@ -23,45 +23,58 @@ function storeuser(e){
         })
 
     //localStorage.setItem(userDetails.userEmail,JSON.stringify(userDetails))
+    window.location.reload()
 }
 
 //previous user details
+window.addEventListener("DOMContentLoaded",()=> {
+    axios.get("https://crudcrud.com/api/ba0fc1fdf92747a2a2c1d70cd4fb3d0d/appinfo")
+        .then((response)=>{
+            console.log(response)
+            for(let i=0;i<response.data.length;i++){
+                showNewUserOnScreen(response.data[i])
+            }
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+})
 
-for (let i=0;i<localStorage.length;i++)
-{
-    var old = (localStorage.key(i))
-    var oldUser = JSON.parse(localStorage.getItem(old))
 
-    //crete li and button
+function showNewUserOnScreen(user){
     var li = document.createElement("li")
-    var btn = document.createElement("button")
-    var btndelete = document.createElement("button")
-
-    //set idname
-    btn.id="btnedit"
-    btndelete.id="btndelete"
-    
-    //Set classname
-    li.className="list-group-item"
-    btn.className="btn"
-    btndelete.className="btn delete"
-
-    btn.appendChild(document.createTextNode("Edit"))
-    btndelete.appendChild(document.createTextNode("delete"))
-
-    //append text node
-    li.appendChild(document.createTextNode("name : " + oldUser.userName + ",  email : " +oldUser.userEmail + ",  phone : " + oldUser.userPhone))
-    li.appendChild(btn)
-    li.appendChild(btndelete)
-
-    //append li in userdetails
-
-    var items = document.getElementById("items")
-
-    items.appendChild(li)
-
-    
+                var btn = document.createElement("button")
+                var btndelete = document.createElement("button")
+                //set idname
+                btn.id="btnedit"
+                btndelete.id="btndelete"
+                
+                //Set classname
+                li.className="list-group-item"
+                btn.className="btn"
+                btndelete.className="btn delete"
+        
+                btn.appendChild(document.createTextNode("Edit"))
+                btndelete.appendChild(document.createTextNode("delete"))
+        
+                //append text node
+                li.appendChild(document.createTextNode("name : " + user.userName + ",  email : " + user.userEmail + ",  phone : " + user.userPhone))
+                li.appendChild(btn)
+                li.appendChild(btndelete)
+        
+                //append li in userdetails
+        
+                var items = document.getElementById("items")
+                items.appendChild(li)
+                
 }
+
+
+
+
+
+    
+
      //delete user 
     var itemlist = document.getElementById("items")  
  
